@@ -1,9 +1,10 @@
-﻿{
+﻿[
+  {
   "Author": "k8thekat",
   "Name": "TPie+",
   "Punchline": "Customizable ring-shaped hotbars",
   "Description": "Highly configurable hotbars that can be toggled with a keybind. They can be filled with Actions, Items, Gear Sets, Macros and more...",
-  "Changelog": "# v2.0.0 - Bug Fixes + Better Keybinds\n- Added support for additional keybinds ('CTRL', 'ALT', 'SHIFT') can now be used by themselves or together.\n- Fixed `ImGui` errors related to Push and Pop.\n- Refactored `KeyBind` class to support new functionality.\n- Added support for `OpenConfigUi` per Dalamund."
+  "Changelog": "# v2.0.0 - Bug Fixes + Better Keybinds\n- Added support for additional keybinds ('CTRL', 'ALT', 'SHIFT') can now be used by themselves or together.\n- Fixed `ImGui` errors related to Push and Pop.\n- Refactored `KeyBind` class to support new functionality.\n- Added support for `OpenConfigUi` per Dalamund.",
   "IsHide": false,
   "InternalName": "TPie-Plus",
   "AssemblyVersion": "2.0.0.0",
@@ -17,5 +18,7 @@
   "DownloadLinkInstall": "https://github.com/k8thekat/TPie/releases/tag/2.0.0.0/latest.zip",
   "DownloadLinkUpdate": "https://github.com/k8thekat/TPie/releases/tag/2.0.0.0/latest.zip",
   "SupportsProfiles": true,
+  "Tags": [ "UI" ],
   "IconUrl": "https://github.com/k8thekat/TPie/Media/icon.png"
 }
+  ]
