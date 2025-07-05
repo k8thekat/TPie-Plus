@@ -14,8 +14,8 @@
   "TestingDalamudApiLevel": 11,
   "DownloadCount": 85738,
   "LastUpdate": 1749876830,
-  "DownloadLinkInstall": "https://github.com/k8thekat/TPie/releases/download/2.0.0.0/latest.zip",
-  "DownloadLinkUpdate": "https://github.com/k8thekat/TPie/releases/download/2.0.0.0/latest.zip",
+  "DownloadLinkInstall": "https://github.com/k8thekat/TPie/releases/tag/2.0.0.0",
+  "DownloadLinkUpdate": "https://github.com/k8thekat/TPie/releases/tag/2.0.0.0",
   "SupportsProfiles": true,
   "IconUrl": "https://github.com/k8thekat/TPie/Media/icon.png"
 }
