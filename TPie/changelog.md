@@ -1,3 +1,9 @@
+# v2.0.0 - Bug Fixes + Better Keybinds
+- Added support for additional keybinds ("CTRL", "ALT", "SHIFT") can now be used by themselves or together.
+- Fixed `ImGui` errors related to Push and Pop.
+- Refactored `KeyBind` class to support new functionality.
+- Added support for `OpenConfigUi` per Dalamund.
+
 # 1.11.0.0
 - Added support for Patch 7.2 and Dalamud API 12.
 
