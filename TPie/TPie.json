@@ -1,9 +1,0 @@
-﻿{
-  "Name": "TPie",
-  "Author": "Tischel, k8thekat",
-  "Punchline": "Customizable ring-shaped hotbars",
-  "Description": "Highly configurable hotbars that can be toggled with a keybind. They can be filled with Actions, Items, Gear Sets, Macros and more...",
-  "RepoUrl": "https://github.com/k8thekat/TPie",
-  "Tags": [ "UI" ],
-  "Changelog": "# 2.0.0\n\n- Added support for Patch 7.2 and Dalamud API 12."
-}

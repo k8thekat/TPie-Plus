@@ -59,7 +59,6 @@
 
 	<!-- Included Content -->
 	<ItemGroup>
-		<Content Include="$(ProjectDir)TPie.json" CopyToOutputDirectory="Always" />
 		<Content Include="$(ProjectDir)Media\**" CopyToOutputDirectory="PreserveNewest" />
 		<!-- <Content Include="$(ProjectDir)Media\icon.png" Link="images/icon.png" CopyToOutputDirectory="PreserveNewest" Visible="false" /> -->
 	</ItemGroup>
