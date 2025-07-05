@@ -105,6 +105,7 @@ namespace TPie.Models
 
         public bool Update()
         {
+            // Plugin.Logger.Info("Ring Update()");
             HasInventoryItems = Items.FirstOrDefault(item => item is ItemElement) != null;
             _validItems = Items.Where(o => o.IsValid() && o != QuickActionElement).ToList();
 
@@ -118,7 +119,7 @@ namespace TPie.Models
             {
                 return true;
             }
-
+            
             KeyBind currentKeyBind = CurrentKeybind();
 
             // click to select in toggle mode
@@ -421,6 +422,7 @@ namespace TPie.Models
 
         private KeyBind CurrentKeybind()
         {
+            // Plugin.Logger.Info($"Temp Keybind: {_tmpKeyBind} | Cur Keybind: {KeyBind} | Get One: {_tmpKeyBind ?? KeyBind}");
             return _tmpKeyBind ?? KeyBind;
         }
         #endregion

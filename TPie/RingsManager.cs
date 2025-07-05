@@ -22,6 +22,7 @@ namespace TPie
 
         public void Update()
         {
+            // Plugin.Logger.Info("RingManager Update()");
             bool clearTmpKeyBinds = false;
 
             if (!_skipNextClosedCheck && _activeRing?.IsClosed() == true)

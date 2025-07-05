@@ -291,7 +291,8 @@ namespace TPie.Config
                 ImGui.PushFont(UiBuilder.IconFont);
                 if (ImGui.Button(FontAwesomeIcon.Plus.ToIconString()))
                 {
-                    Ring newRing = new Ring($"Ring{Rings.Count + 1}", Vector4.One, new KeyBind(0), 150f, new Vector2(40));
+                    // Ring newRing = new Ring($"Ring{Rings.Count + 1}", Vector4.One, new KeyBind(0), 150f, new Vector2(40));
+                    Ring newRing = new Ring($"Ring{Rings.Count + 1}", Vector4.One, new KeyBind([0]), 150f, new Vector2(40));
                     Plugin.Settings.AddRing(newRing);
                 }
                 ImGui.PopFont();
@@ -351,7 +352,8 @@ namespace TPie.Config
                 for (int i = 0; i < Rings.Count; i++)
                 {
                     Ring ring = Rings[i];
-
+                    
+                    // This may be spawning our error.
                     ImGui.PushID(i.ToString());
                     ImGui.TableNextRow(ImGuiTableRowFlags.None, 28);
 
@@ -460,8 +462,9 @@ namespace TPie.Config
                         ImGui.PopFont();
                         DrawHelper.SetTooltip("Move down");
                     }
+                // This may be spawning our error.
+                ImGui.PopID();
                 }
-
                 ImGui.EndTable();
             }
 

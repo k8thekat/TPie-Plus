@@ -188,8 +188,10 @@ namespace TPie.Config
                             }
                         }
                     }
+                    // Bugfix for Push/PopID Error.
+                    ImGui.PopID();
                 }
-
+                
                 ImGui.EndTable();
             }
 

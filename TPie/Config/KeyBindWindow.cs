@@ -50,6 +50,7 @@ namespace TPie.Config
             KeyBind keyBind = Ring.KeyBind;
 
             // main
+            // This appears to be the "Edit Keybind" settings window when clicking the "Keybind" button for a Ring.
             ImGui.BeginChild("##KeyBind_Main", new Vector2(280 * _scale, 94 * _scale), true);
             {
                 if (_needsFocus)
@@ -62,7 +63,7 @@ namespace TPie.Config
                 {
                     Plugin.Settings.ValidateKeyBind(Ring);
                 }
-
+                
                 ImGui.Checkbox("Toggleable", ref keyBind.Toggle);
                 DrawHelper.SetTooltip("When enabled, this keybind will behave as a toggle instead of \"press and hold\".\nOn this mode, once an item is selected, you can either press the keybind again or just click to activate it.");
 

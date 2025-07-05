@@ -62,20 +62,67 @@ namespace TPie.Helpers
             return _keyStates[(int)Keys.Escape] > 1;
         }
 
-        public int GetKeyPressed()
-        {
-            if (!IsGameFocused()) return 0;
+        // public int GetKeyPressed()
+        // {
+        //     if (!IsGameFocused()) return 0;
+        //     
+        //     // They appear to be for looping by an increment of `i` or `1`
+        //     // through all the entries of the _supportedKeys list.
+        //     for (int i = 0; i < _supportedKeys.Count; i++)
+        //     {
+        //         // Using the index and Enum value from `Keys` to map an int value.
+        //         // They check that key state, if the bit is > 1 it's down, otherwise it's up.
+        //         int key = (int)_supportedKeys[i];
+        //         // Going through the list of supported keys, they are checking if any of them are "pressed down"
+        //         // and returning that specific key.
+        //         if (_keyStates[key] > 1)
+        //         {
+        //             return key;
+        //         }
+        //     }
+        //
+        //     return 0;
+        // }
 
+        public List<int> GetKeysPressed()
+        {
+        List<int> keysPressed = [];
+            if (!IsGameFocused()) return keysPressed;
+            
             for (int i = 0; i < _supportedKeys.Count; i++)
             {
+                // Using the index and Enum value from `Keys` to map an int value.
+                // They check that key state, if the bit is > 1 it's down, otherwise it's up.
                 int key = (int)_supportedKeys[i];
+                // Going through the list of supported keys, they are checking if any of them are "pressed down"
+                // and returning that specific key.
                 if (_keyStates[key] > 1)
                 {
-                    return key;
+                    keysPressed.Add(key);
                 }
+                
             }
-
-            return 0;
+            return keysPressed;
+        }
+        
+        public bool IsKeysPressed(List<int> keys)
+        {
+            if (!IsGameFocused()) return false;
+            
+            foreach (int t in keys)
+            {
+                // If any of the key's currently pressed are *NOT* backspace or
+                // any of our supported keys we return false, otherwise we are pressing supported keys.
+                if (t == (int)Keys.Back)
+                    return false;
+                else if (_supportedKeys.Contains((Keys)t) == false)
+                    return false;
+                else if (_keyStates[t] <= 1)
+                    return false;
+                // Plugin.Logger.Info($"Cur Key: {t} | State: {_keyStates[t]}");
+            }
+            // Plugin.Logger.Info($"Return: {true}");
+            return true;
         }
 
         private byte[] _keyStates;
@@ -195,6 +242,13 @@ namespace TPie.Helpers
             Keys.Oem8,
             Keys.OemBackslash,
             Keys.Oem102,
+            Keys.LControlKey,
+            Keys.RControlKey,
+            Keys.LShiftKey,
+            Keys.RShiftKey,
+            Keys.LMenu,
+            Keys.RMenu
+            
         };
 
         [DllImport("user32.dll")]

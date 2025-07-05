@@ -105,6 +105,7 @@ namespace TPie
             Framework.Update += Update;
             UiBuilder.Draw += Draw;
             UiBuilder.OpenConfigUi += OpenConfigUi;
+            UiBuilder.OpenMainUi += OpenMainUi;
 
             CommandManager.AddHandler(
                 "/tpie",
@@ -282,6 +283,7 @@ namespace TPie
 
         private void Update(IFramework framework)
         {
+            
             if (Settings == null || ClientState.LocalPlayer == null) return;
 
             KeyboardHelper.Instance?.Update();
@@ -303,6 +305,8 @@ namespace TPie
         {
             _settingsWindow.IsOpen = true;
         }
+
+        private void OpenMainUi() { _settingsWindow.IsOpen = true; }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -326,6 +330,7 @@ namespace TPie
             Framework.Update -= Update;
             UiBuilder.Draw -= Draw;
             UiBuilder.OpenConfigUi -= OpenConfigUi;
+            UiBuilder.OpenMainUi -= OpenMainUi;
 
             FontsHelper.ClearFont();
             UiBuilder.CreateFontAtlas(FontAtlasAutoRebuildMode.Async, false, null);

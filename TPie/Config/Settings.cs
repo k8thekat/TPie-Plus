@@ -49,7 +49,9 @@ namespace TPie.Config
 
             WotsitHelper.Instance?.Update();
         }
-
+        
+        
+        // `prioritizedRing` appears to be the current Ring being modified via RingSettingsWindow,etc..
         public void ValidateKeyBind(Ring prioritizedRing)
         {
             foreach (Ring ring in Rings)
