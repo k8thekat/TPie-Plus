@@ -9,15 +9,16 @@
 		<Authors>k8thekat</Authors>
 		<Copyright>GNU Affero General Public License v3.0</Copyright>
 		<PackageProjectUrl></PackageProjectUrl>
-		<PackageIcon>\Media\icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/k8thekat/TPie</RepositoryUrl>
 		<RepositoryType>gitHub</RepositoryType>
 		<Title>TPie+</Title>
+		<RootNamespace>TPie-Plus</RootNamespace>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<!-- Assembly Configuration -->
 	<PropertyGroup>
-		<AssemblyName>TPie</AssemblyName>
+		<AssemblyName>TPie-Plus</AssemblyName>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<FileVersion>2.0.0.0</FileVersion>
 		<InformationalVersion>1.11.0.0</InformationalVersion>
@@ -32,7 +33,6 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
