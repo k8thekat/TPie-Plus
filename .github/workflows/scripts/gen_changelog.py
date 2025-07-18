@@ -5,10 +5,10 @@ import subprocess  # noqa: S404
 version = ""
 
 
-project_dir: pathlib.Path = pathlib.Path(__file__).parent.joinpath("TPie-Plus")
+project_dir: pathlib.Path = pathlib.Path().joinpath("TPie-Plus")
 repo_url = "https://github.com/k8thekat/TPie-Plus/"
 
-cl_file: pathlib.Path = pathlib.Path(__file__).parent.joinpath("CHANGELOG.md")
+cl_file: pathlib.Path = pathlib.Path().parent.parent.parent.parent.joinpath("CHANGELOG.md")
 if cl_file.exists() is False:
     msg = "Unable to locate the file. %s"
     raise FileNotFoundError(msg, cl_file.as_posix())

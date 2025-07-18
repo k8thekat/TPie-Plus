@@ -1,3 +1,18 @@
+## Version - 3.0.0.1 - [e3ba241](https://github.com/k8thekat/TPie-Plus/commit/e3ba241)
+#### TPie-Plus.csproj
+- Version bump to `3.0.0.1`
+
+#### Overall
+Merge branch 'development' of https://github.com/k8thekat/TPie into development
+Merge pull request #2 from k8thekat/development"
+Development"
+- !BREAKING UPDATE! Will not load old rings due to config changes.
+- Rewrite of window drawing for `RingSettings`.
+- Added new art, new center ring and arrow.
+	- Better logic for arrow to follow your cursor.
+- Updated TODO. Woohoo
+Create changelog.yml"
+
 ## Version - 2.1.0.1 - [6d16887](https://github.com/k8thekat/TPie-Plus/commit/6d16887)
 
 #### CHANGELOG.md
