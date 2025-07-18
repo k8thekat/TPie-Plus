@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // This will throw a "No launchable target found" error; but does build properly.
+      "name": "dotNet: Build",
+      "type": "dotnet",
+      "request": "launch",
+      "preLaunchTask": "dotnet: build",
+      "projectPath": "${workspaceFolder}/TPie-Plus/TPie-Plus.csproj",
+  
+    }
+  ]
+}

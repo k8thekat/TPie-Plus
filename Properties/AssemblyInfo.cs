@@ -1,15 +1,12 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-
-// General Information about an assembly is controlled through the following 
+﻿// General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TPiePlugin")]
+[assembly: AssemblyTitle("TPie-PlusPlugin")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TPiePlugin")]
-[assembly: AssemblyCopyright("Copyright © 2021 Tischel")]
+[assembly: AssemblyProduct("TPie-PlusPlugin")]
+[assembly: AssemblyCopyright("Copyright © 2021 Tischel & Copyright © 2025 k8thekat")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

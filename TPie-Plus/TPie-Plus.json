@@ -1,0 +1,12 @@
+﻿{
+  "Name": "TPie+",
+  "Author": "k8thekat",
+  "Punchline": "Customizable ring-shaped hotbars",
+  "Description": "Fork of TPie -- Highly configurable hotbars that can be toggled with a keybind. They can be filled with Actions, Items, Gear Sets, Macros and more...",
+  "RepoUrl": "https://github.com/k8thekat/TPie-Plus",
+  "Tags": [
+    "UI"
+  ],
+  "Changelog": "# v2.1.0.1\n\n- Documentation Update\n- Further backend setting changes and naming conventions to match `TPie+`.\n- Attempted fix for Dalamud Icon urls.",
+  "IconUrl": "https://raw.githubusercontent.com/k8thekat/TPie-Plus/refs/heads/master/TPie-Plus/Media/icon.png"
+}

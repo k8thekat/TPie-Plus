@@ -1,7 +1,10 @@
-# TPie Plugin
+# TPie-Plus Plugin
 
 A Final Fantasy XIV Dalamud Plugin for configurable ring-shaped hotbars.
+- Updated with better keybind support for `CTRL`, `SHIFT` and `ALT` by themselves.
 
+### Original Author
+- https://github.com/Tischel/TPie
 
 
 ## Usage
