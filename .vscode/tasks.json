@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": {"kind": "build", "isDefault": true},
+			"problemMatcher": [],
+			"label": "dotnet: build",
+
+		},
+		{
+			"label": "update Version",
+			"command": "python ${workspaceFolder}/build.py",
+			"group": "build",
+			"type": "shell",
+			"presentation": {
+				"reveal": "always",
+				"focus": true,
+				"panel": "new",
+				"echo": true,
+		
+			}
+
+		},
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": {"kind": "build", "isDefault": false},
+			"problemMatcher": [],
+			"label": "dotnet: build + update",
+			"dependsOn": "update Version",
+		}
+	]
+}
