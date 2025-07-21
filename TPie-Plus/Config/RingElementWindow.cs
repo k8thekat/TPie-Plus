@@ -1,7 +1,7 @@
-﻿using Dalamud.Interface.Utility;
+﻿using System.Numerics;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
-using System.Numerics;
 using TPie_Plus.Models;
 using TPie_Plus.Models.Elements;
 
@@ -10,7 +10,7 @@ namespace TPie_Plus.Config
     public abstract class RingElementWindow : Window
     {
         public Ring? Ring = null;
-        
+
 
         protected abstract RingElement? Element { get; set; }
 
@@ -35,7 +35,10 @@ namespace TPie_Plus.Config
         {
             Element = null;
         }
-
+        /// <summary>
+        /// Set's the Keyboard input focus to nearest element.
+        /// eg. TextInputField, etc...
+        /// </summary>
         protected void FocusIfNeeded()
         {
             if (_needsFocus)

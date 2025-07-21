@@ -60,13 +60,15 @@ namespace TPie_Plus.Config
             if (ItemElement == null) return;
 
             ImGui.PushItemWidth(240 * _scale);
+
+            // Force keyboard focus to text window.
+            FocusIfNeeded();
             if (ImGui.InputText("Name ##Item", ref _inputText, 100) || _needsSearch)
             {
                 SearchItems(_inputText);
                 _needsSearch = false;
             }
 
-            FocusIfNeeded();
 
             ImGui.Checkbox("In Inventory", ref _onlyInInventory);
 
@@ -137,7 +139,8 @@ namespace TPie_Plus.Config
 
         private void SearchItems(string text)
         {
-            if (_inputText.Length == 0 || _itemsSheet == null || _keyItemsSheet == null)
+            if (_itemsSheet == null || _keyItemsSheet == null)
+
             {
                 _searchResult.Clear();
                 return;
@@ -145,6 +148,36 @@ namespace TPie_Plus.Config
 
             List<ItemSearchData> items = new List<ItemSearchData>();
             List<ItemSearchData> keyItems = new List<ItemSearchData>();
+
+            // TODO(@k8thekat): Should revisit this logic in the future.
+            // This can be resource intensive when they "uncheck" _onlyInventory.
+            // Checking here can at least prevent a "redraw" of the menu items 
+            // if it's unchecked and they re-open the menu.
+            if (text.Length == 0 && _onlyInInventory == true)
+            {
+                List<LuminaItem> result = _itemsSheet.ToList();
+                foreach (LuminaItem row in result)
+                {
+                    items.Add(new ItemSearchData(row.RowId, false, row.Name.ToString(), row.Icon));
+
+                    if (row.CanBeHq)
+                    {
+                        items.Add(new ItemSearchData(row.RowId, true, row.Name.ToString(), row.Icon));
+                    }
+                }
+                keyItems = _keyItemsSheet.Select(row => new ItemSearchData(row.RowId, false, row.Name.ToString(), row.Icon)).ToList();
+                _searchResult.Clear();
+                _searchResult.AddRange(items);
+                _searchResult.AddRange(keyItems);
+                return;
+            }
+
+            if (text.Length == 0 && _onlyInInventory == false)
+            {
+                _searchResult.Clear();
+                return;
+            }
+
 
             text = text.ToUpper();
 

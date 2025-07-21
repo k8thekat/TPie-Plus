@@ -211,7 +211,7 @@ namespace TPie_Plus.Models
             Vector2 margin = new Vector2(400, 400);
             Vector2 radius = new Vector2(Radius);
             Vector2 pos = ValidatedPosition(center - radius - margin);
-            Vector2 size = ValidatedSize(pos, radius * 2 + margin * 2);
+            // Vector2 size = ValidatedSize(pos, radius * 2 + margin * 2);
 
             // create window
             ImGuiHelpers.ForceNextWindowMainViewport();
@@ -260,7 +260,7 @@ namespace TPie_Plus.Models
 
             // elements
             float r = Radius - ItemSize;// This is the Radius Minus the Icon size for the Math
-            double step = (Math.PI * 2) / count; // This is calculating the degrees to space each icon out.
+            // double step = (Math.PI * 2) / count; // This is calculating the degrees to space each icon out.
 
             float distanceToCenter = (mousePos - center).Length();
             if (distanceToCenter > r)
@@ -270,7 +270,6 @@ namespace TPie_Plus.Models
 
             Vector2[] itemPositions = new Vector2[count];
             float[] itemScales = new float[count];
-
             float minDistance = float.MaxValue;
 
             int previousSelection = _selectedIndex;
@@ -280,22 +279,24 @@ namespace TPie_Plus.Models
             // This determines the Ring/Icon spacing around the circle.
             // Also determines if an Icon is moused over or not.
             #region Icon layout
+
             // center is the position the Ring opens at (Mouse Pos ? CenterScreen).
-            double calcAngle = (-360 / count) * (Math.PI / 180f);
+            double calcAngle = (double)-360 / count * (Math.PI / 180f);
+
             // radius is the size of the Ring
-            Vector2 startPos = new(0, Radius - ItemSize);
+            Vector2 startPos = new Vector2(0, Radius - ItemSize);
 
             if (_validItems != null)
-
+            {
                 for (int idx = 0; idx < count; idx++)
                 {
-                    if (idx >= count) break;
+                    if (idx > count) break;
 
                     double sinA = Math.Sin(calcAngle * idx);
                     double cosA = Math.Cos(calcAngle * idx);
                     Vector2 iPos = DrawHelper.RotationPoint(startPos, cosA, sinA);
-                    // Plugin.Logger.Debug($"Icon {idx} Angle: {calcAngle * idx} |  PositionX/Y: {center + iPos}");
                     itemPositions[idx] = center + iPos;
+                    Plugin.Logger.Debug($"cal Angle: {calcAngle * idx} | numIcons: {count} | qAction: {QuickActionElement}");
 
                     if (_animState == AnimationState.Opened)
                     {
@@ -314,7 +315,6 @@ namespace TPie_Plus.Models
                         }
                         // This math here is determining the Icon scale.
                         itemScales[idx] = distance > 200 ? 1f : Math.Clamp(2f - (distance * 2f / 200), 1f, 2f);
-                        // Plugin.Logger.Debug($"Icon Scale: {itemScales[index]}");
                     }
                     else
                     {
@@ -324,10 +324,11 @@ namespace TPie_Plus.Models
                     // bool selected = DrawSelectionBackground && !Previewing && _animState == AnimationState.Opened;
                     float scale = !Previewing && Plugin.Settings.AnimateIconSizes ? itemScales[idx] : 1f;
 
-                    // This is dispatching the Draw event for the Ring and the Icons
+                    // This is dispatching the Draw event for the Rings Icons
                     _validItems[idx].Draw(itemPositions[idx], new Vector2(ItemSize, ItemSize), scale, idx == _selectedIndex, _baseColor, _itemsAlpha[idx], ShowTooltips, drawList);
 
                 }
+            }
             #endregion
 
             #region BG Center Ring

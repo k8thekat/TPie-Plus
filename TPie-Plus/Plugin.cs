@@ -1,4 +1,9 @@
-﻿using Dalamud.Game;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
+using System.Reflection;
+using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Interface;
 using Dalamud.Interface.ManagedFontAtlas;
@@ -9,11 +14,6 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Numerics;
-using System.Reflection;
 using TPie_Plus.Config;
 using TPie_Plus.Helpers;
 using TPie_Plus.Models;
@@ -118,6 +118,16 @@ namespace TPie_Plus
                     ShowInHelp = true
                 }
             );
+            CommandManager.AddHandler(
+                "/tpp",
+                new CommandInfo(PluginCommand)
+                {
+                    HelpMessage = "Opens the TPie-Plus configuration window.",
+
+                    ShowInHelp = true
+                }
+            );
+
 
             ChatHelper.Initialize();
             KeyboardHelper.Initialize();
@@ -218,7 +228,7 @@ namespace TPie_Plus
 
         public static void ShowElementWindow(Vector2 position, Ring ring, RingElement element)
         {
-            
+
             RingElementWindow? window = null;
 
             _actionElementWindow.IsOpen = false;
@@ -271,7 +281,7 @@ namespace TPie_Plus
                 window = _nestedRingElementWindow;
                 _nestedRingElementWindow.NestedRingElement = nestedRingElement;
             }
-            
+
             // They are using the `window` var
             if (window != null)
             {
@@ -297,7 +307,7 @@ namespace TPie_Plus
 
         private void Update(IFramework framework)
         {
-            
+
             if (Settings == null || ClientState.LocalPlayer == null) return;
 
             KeyboardHelper.Instance?.Update();
