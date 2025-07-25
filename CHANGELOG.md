@@ -1,3 +1,8 @@
+## Version - 3.0.2.1 - [132786a](https://github.com/k8thekat/TPie-Plus/commit/132786a)
+#### Overall
+Merge branch 'development' of https://github.com/k8thekat/TPie into development
+- Highlighting logic was incorrect and causing issues when moused over.
+
 ## Version - 3.0.2.0 - [ed9cf5d](https://github.com/k8thekat/TPie-Plus/commit/ed9cf5d)
 #### Overall
 Merge branch 'development' of https://github.com/k8thekat/TPie into development
