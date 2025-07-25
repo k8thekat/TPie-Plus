@@ -1,3 +1,11 @@
+## Version - 3.0.2.0 - [ed9cf5d](https://github.com/k8thekat/TPie-Plus/commit/ed9cf5d)
+#### Overall
+Merge branch 'development' of https://github.com/k8thekat/TPie into development
+- Refactored the logic around Rings and Icon spacing and interaction with the mouse.
+- Icons scale based upon mouse position relative to the Icon.
+- Icons nearby move away from the nearest Icon to the mouse.
+- Improved documentation in multiple locations.
+
 ## Version - 3.0.1.0 - [1545ad5](https://github.com/k8thekat/TPie-Plus/commit/1545ad5)
 #### Version bump to `3.0.1.0`
 
