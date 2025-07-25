@@ -350,12 +350,14 @@ namespace TPie_Plus.Models
                         float scale = _animState != AnimationState.Opening && _animState != AnimationState.Closing && distanceToCenter > r * .50f ? 1f : Math.Clamp((Radius - distanceToCenter - (ItemSize * .25f)) * .007f, 1f, 2f);
                         // We are scaling the bounday box as the icon gets bigger/smaller relative to mouse distance to center.
                         Rectangle boundary = new Rectangle((int)(center.X - (ItemSize * scale) * .5f), (int)(center.Y - (ItemSize * scale) * .5f), (int)(ItemSize * scale), (int)(ItemSize * scale));
-
-                        _quickActionSelected = DrawSelectionBackground && !Previewing && boundary.Contains((int)mousePos.X, (int)mousePos.Y);
+                        // _quickActionSelected = DrawSelectionBackground && !Previewing && boundary.Contains((int)mousePos.X, (int)mousePos.Y);
                         float alpha = _itemsAlpha.Length > 0 ? _itemsAlpha[0] : 1f;
                         // This prevents us from picking a Ring Item when inside our bounding box.
+                        _quickActionSelected = boundary.Contains((int)mousePos.X, (int)mousePos.Y);
+                        // Plugin.Logger.Debug($"Quick Action Selected: {_quickActionSelected}");
                         if (_quickActionSelected)
                         {
+                            _quickActionSelected = true;
                             alpha = 1;
                             mouseIdx = -1;
                         }
