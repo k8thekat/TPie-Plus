@@ -1,3 +1,17 @@
+## Version - 3.0.1.0 - [1545ad5](https://github.com/k8thekat/TPie-Plus/commit/1545ad5)
+#### Version bump to `3.0.1.0`
+
+#### 3.0.1.0
+- Version bumped `csproj` and `pluginmaster`.
+- Updated `.gitignore`.
+- Updated `TODO.md`.
+- Sorted `using` statements in multiple files.
+- Added an additional command helper. `/tpp`.
+- Changed keyboard focus to the item search input field when adding an item through the `Item Settings` window.
+- Added logic to `Item Settings` to automatically populate the item selectable list with current inventory items when `In Inventory` is checked.
+- Added a summary to `FocusIfNeeded()`.
+- Fixed math value truncating when calculating degree offsets for Icons.
+
 ## Version - 3.0.0.1 - [e3ba241](https://github.com/k8thekat/TPie-Plus/commit/e3ba241)
 #### TPie-Plus.csproj
 - Version bump to `3.0.0.1`
