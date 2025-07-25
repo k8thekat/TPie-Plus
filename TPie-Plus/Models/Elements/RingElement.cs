@@ -11,17 +11,13 @@ namespace TPie_Plus.Models.Elements
 {
     [JsonConverter(typeof(RingElementConverter))]
 
-    /// <summary>
-    /// This represents each Icon or "Item" inside a ring.
-    /// </summary>
+    /// <summary> This represents each Icon or "Item" inside a ring.</summary>
     public abstract class RingElement
     {
         public uint IconID { get; set; }
         public ItemBorder Border { get; set; } = ItemBorder.GlobalBorderSettingsCopy();
 
-        /// <summary>
-        /// This handles drawing the entire Ring and all it's Icons.
-        /// </summary>
+        /// <summary> This handles drawing the entire Ring and all it's Icons.</summary>
         public virtual void Draw(Vector2 position, Vector2 size, float scale, bool selected, uint color, float alpha, bool tooltip, ImDrawListPtr drawList)
         {
             size = size * scale;

@@ -147,10 +147,18 @@ namespace TPie_Plus.Helpers
             return (didConfirm, didClose);
         }
 
-        public static Vector2 RotationPoint(Vector2 xy, double cosA, double sinA)
+        public static Vector2 RotationPoint(Vector2 xy, double cosA, double sinA, bool invert = false)
         {
-            double x = xy.X * cosA - xy.Y * sinA;
-            double y = xy.X * sinA + xy.Y * cosA;
+            double x;
+            double y;
+            if (invert == true)
+            {
+                x = xy.X * sinA - xy.Y * cosA;
+                y = xy.X * cosA + xy.Y * sinA;
+                return new Vector2((float)x, (float)y);
+            }
+            x = xy.X * cosA - xy.Y * sinA;
+            y = xy.X * sinA + xy.Y * cosA;
             return new Vector2((float)x, (float)y);
         }
         /// <summary>

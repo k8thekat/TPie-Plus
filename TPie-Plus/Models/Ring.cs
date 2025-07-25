@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Interface.Textures.TextureWraps;
@@ -80,7 +81,6 @@ namespace TPie_Plus.Models
         private float[] _itemsDistanceScales = null!;
         private float[] _itemsAlpha = null!;
 
-        // public Ring(string name, Vector4 color, KeyBind keyBind, float radius, Vector2 itemSize)
         public Ring(string name, Vector4 color, KeyBind keyBind, float radius, float itemSize)
         {
             Name = name;
@@ -211,13 +211,13 @@ namespace TPie_Plus.Models
             Vector2 margin = new Vector2(400, 400);
             Vector2 radius = new Vector2(Radius);
             Vector2 pos = ValidatedPosition(center - radius - margin);
-            // Vector2 size = ValidatedSize(pos, radius * 2 + margin * 2);
 
             // create window
             ImGuiHelpers.ForceNextWindowMainViewport();
 
             ImGui.SetNextWindowPos(pos, Previewing ? ImGuiCond.Always : ImGuiCond.Appearing);
-            ImGui.SetNextWindowSize(radius * 2 + margin * 2, ImGuiCond.Always);
+            // This controls the window size (imagine an invisible box around the ring)
+            ImGui.SetNextWindowSize((radius * 1.25f) + (margin * 2), ImGuiCond.Always);
             ImGui.SetNextWindowBgAlpha(0);
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
@@ -259,140 +259,234 @@ namespace TPie_Plus.Models
 
 
             // elements
-            float r = Radius - ItemSize;// This is the Radius Minus the Icon size for the Math
-            // double step = (Math.PI * 2) / count; // This is calculating the degrees to space each icon out.
-
+            // Radius is Ring.Radius
+            float r = Radius - ItemSize;
+            // center is the position the Ring opens at (Mouse Pos ? CenterScreen).
             float distanceToCenter = (mousePos - center).Length();
-            if (distanceToCenter > r)
-            {
-                mousePos = center + Vector2.Normalize(mousePos - center) * r;
-            }
-
-            Vector2[] itemPositions = new Vector2[count];
-            float[] itemScales = new float[count];
-            float minDistance = float.MaxValue;
-
-            int previousSelection = _selectedIndex;
             _selectedIndex = -1;
 
-
+            #region Icon layout
             // This determines the Ring/Icon spacing around the circle.
             // Also determines if an Icon is moused over or not.
-            #region Icon layout
+            double offsetAngle = (double)360 / count;
 
-            // center is the position the Ring opens at (Mouse Pos ? CenterScreen).
-            double calcAngle = (double)-360 / count * (Math.PI / 180f);
+            // This is in Radians.
+            double calcAngle = offsetAngle * (Math.PI / 180f);
 
-            // radius is the size of the Ring
+            // Radius is the size of the Ring
             Vector2 startPos = new Vector2(0, Radius - ItemSize);
+
+            // This houses all the Icon position data in an array.
+            Vector2[] itemPositions;
+            itemPositions = IconLayout(calcAngle, count, startPos, center);
+
+            // This houses scale of the Icons in an array.
+            float[] itemScales = new float[count];
 
             if (_validItems != null)
             {
-                for (int idx = 0; idx < count; idx++)
+
+
+                // Mouse angle
+                Vector2 direction = Vector2.Normalize(mousePos - center);
+                // This is in Radians: Range=(+0 - (+3.14) || -0 - (-3.14)
+                // This is the "angle" of the mouse in relation to the center. (from 9 o'clock position).
+                double angle = Math.Atan2(direction.Y, direction.X) + Math.PI;
+
+                // The *(180 / Math.PI) is to convert Radians to Degree's.
+                // We + 90* because of the start point for calculating Radians is at the 9 o'clock position.
+                // and the icons start at the 6 o'clock position.
+                double mouseAngleDeg = ((double)angle * (180f / Math.PI)) + 90;
+
+                // This would be the "rough index" into the Ring Items. 
+                int mouseIdx = ((int)(mouseAngleDeg / offsetAngle) + count) % count;
+
+                // This determines what Icon the mouse is closest to.
+                // upperbound || lowerbound
+                if (mouseAngleDeg > (mouseIdx * (int)offsetAngle) + (offsetAngle * .5f) - (offsetAngle * .20f) % 360f && mouseAngleDeg < (mouseIdx * (int)offsetAngle) + (offsetAngle * .5f) + (offsetAngle * .20f) % 360f)
+                    mouseIdx = -1;
+
+                else if (mouseAngleDeg > (mouseIdx * (int)offsetAngle) + (offsetAngle * .5f) + (offsetAngle * .21f) % 360f)
+                    mouseIdx = (mouseIdx + 1) % count;
+
+                #region BG Center Ring
+                uint color = !Previewing && _selectedIndex >= 0 ? _baseColor : _lineColor;
+                IDalamudTextureWrap? centerRing = Plugin.RingCenter?.GetWrapOrDefault();
+                Vector2 ringSize = new Vector2(Radius * .27f);
+                Vector2 arrowOffset = new Vector2(ringSize.X, 0); // Horizontal , Vertical
+                if (centerRing != null)
                 {
-                    if (idx > count) break;
+                    drawList.AddImage(centerRing.ImGuiHandle, center - ringSize, center + ringSize, Vector2.Zero, Vector2.One, color);
+                }
+                #endregion
 
-                    double sinA = Math.Sin(calcAngle * idx);
-                    double cosA = Math.Cos(calcAngle * idx);
-                    Vector2 iPos = DrawHelper.RotationPoint(startPos, cosA, sinA);
-                    itemPositions[idx] = center + iPos;
-                    Plugin.Logger.Debug($"cal Angle: {calcAngle * idx} | numIcons: {count} | qAction: {QuickActionElement}");
-
+                #region Arrow
+                // Arrow
+                if (DrawLine)
+                {
                     if (_animState == AnimationState.Opened)
                     {
-                        // TODO(@k8thekat): When mousing over the Icon we could subtract a flat value or % from the angle value.
-                        // This is determining the Mouse Position in relation to Icons for which "Icon"
-                        // to scale up.
-                        // -- Also allowing us to scale the icon.
-                        // We can calculate the mouse pos via Cos/Sin angles and determine which Icon we are near(or at)
-                        // -- Since we have the Radius and the known angles of the Icons.
-                        float distance = (itemPositions[idx] - mousePos).Length();
-                        if (distance < minDistance)
+
+                        IDalamudTextureWrap? arrowRing = Plugin.RingArrow?.GetWrapOrDefault();
+                        if (arrowRing != null)
                         {
-                            bool selected = distance <= ItemSize * 2;
-                            _selectedIndex = selected ? idx : _selectedIndex;
-                            minDistance = selected ? distance : minDistance;
+                            Vector2 arrowSize = new Vector2(ringSize.X * .6f, ringSize.Y * 1.0f);
+                            direction = Vector2.Normalize(mousePos - center);
+                            angle = Math.Atan2(direction.Y, direction.X);
+                            DrawHelper.DrawRotation(center, arrowSize, angle, arrowOffset, drawList, arrowRing, color);
                         }
-                        // This math here is determining the Icon scale.
-                        itemScales[idx] = distance > 200 ? 1f : Math.Clamp(2f - (distance * 2f / 200), 1f, 2f);
+
                     }
-                    else
-                    {
-                        itemScales[idx] = 1f;
-                    }
-
-                    // bool selected = DrawSelectionBackground && !Previewing && _animState == AnimationState.Opened;
-                    float scale = !Previewing && Plugin.Settings.AnimateIconSizes ? itemScales[idx] : 1f;
-
-                    // This is dispatching the Draw event for the Rings Icons
-                    _validItems[idx].Draw(itemPositions[idx], new Vector2(ItemSize, ItemSize), scale, idx == _selectedIndex, _baseColor, _itemsAlpha[idx], ShowTooltips, drawList);
-
                 }
-            }
-            #endregion
+                #endregion
 
-            #region BG Center Ring
-            uint color = !Previewing && _selectedIndex >= 0 ? _baseColor : _lineColor;
-            IDalamudTextureWrap? centerRing = Plugin.RingCenter?.GetWrapOrDefault();
-            Vector2 ringSize = new(Radius * .27f);
-            Vector2 arrowOffset = new(ringSize.X, 0); // Horizontal , Vertical
-            if (centerRing != null)
-            {
-                drawList.AddImage(centerRing.ImGuiHandle, center - ringSize, center + ringSize, Vector2.Zero, Vector2.One, color);
-            }
-            #endregion
-            #region Arrow
-            // Arrow
-            if (DrawLine)
-            {
-                if (_animState == AnimationState.Opened)
+                #region Quick Action
+                // quick action
+                if (QuickActionElement != null)
                 {
-
-                    IDalamudTextureWrap? arrowRing = Plugin.RingArrow?.GetWrapOrDefault();
-                    if (arrowRing != null)
+                    if (_animState == AnimationState.Opened)
                     {
-                        Vector2 arrowSize = new(ringSize.X * .6f, ringSize.Y * 1.0f);
-                        Vector2 direction = Vector2.Normalize(mousePos - center);
-                        double angle = Math.Atan2(direction.Y, direction.X);
-                        DrawHelper.DrawRotation(center, arrowSize, angle, arrowOffset, drawList, arrowRing, color);
+
+                        float scale = _animState != AnimationState.Opening && _animState != AnimationState.Closing && distanceToCenter > r * .50f ? 1f : Math.Clamp((Radius - distanceToCenter - (ItemSize * .25f)) * .007f, 1f, 2f);
+                        // We are scaling the bounday box as the icon gets bigger/smaller relative to mouse distance to center.
+                        Rectangle boundary = new Rectangle((int)(center.X - (ItemSize * scale) * .5f), (int)(center.Y - (ItemSize * scale) * .5f), (int)(ItemSize * scale), (int)(ItemSize * scale));
+
+                        _quickActionSelected = DrawSelectionBackground && !Previewing && boundary.Contains((int)mousePos.X, (int)mousePos.Y);
+                        float alpha = _itemsAlpha.Length > 0 ? _itemsAlpha[0] : 1f;
+                        // This prevents us from picking a Ring Item when inside our bounding box.
+                        if (_quickActionSelected)
+                        {
+                            alpha = 1;
+                            mouseIdx = -1;
+                        }
+                        uint selectionColor = alpha >= 1f ? _baseColor : 0;
+                        QuickActionElement.Draw(center, new Vector2(ItemSize, ItemSize), scale, _quickActionSelected, selectionColor, alpha, ShowTooltips, drawList);
                     }
 
                 }
+                #endregion
+
+                // If the mouse positon is further out. Just ignore the Ring.
+                if (distanceToCenter > Radius * 1.25f)
+                {
+                    // Plugin.Logger.Debug($"Mouse outside Ring Boundary: {distanceToCenter > Radius * 1.25f}");
+                    mouseIdx = -1;
+                }
+
+                // Selection handling
+                _selectedIndex = mouseIdx;
+                Plugin.Logger.Debug($"mouseIdx: {mouseIdx}");
+
+                float iconRadius = (Radius * 1.25f) - Radius;
+                if (mouseIdx != -1 && _animState == AnimationState.Opened)
+                {
+                    // calculate offsetPercent by mouse distance.
+                    float distanceToIcon = (itemPositions[mouseIdx] - mousePos).Length();
+                    float offsetPercent = distanceToIcon > iconRadius ? 0 : Math.Clamp(Math.Abs(iconRadius - distanceToIcon) * .003f, 0f, (count / Radius) * 9f);
+                    // Adjusted the Icon spacing(offset) when moving a mouse towards an Icon.
+                    AdjustedIconLayout(calcAngle, offsetPercent, mouseIdx, ref itemPositions, startPos, center);
+                }
+
+                for (int _ = 0; _ < count; _++)
+                {
+                    int idx = _;
+                    // This controls the scale of the Icon when moving closer and further away with the mouse.
+                    // This has the "mouse over" icon drawn last putting it on top.
+                    if (mouseIdx != -1)
+                        idx = (_ + mouseIdx + 1) % count;
+
+                    itemScales[idx] = 1f;
+                    if (idx == mouseIdx && _animState == AnimationState.Opened)
+                    {
+                        // This one is flipped to as we need the value to grow the closer we get.
+                        float distanceToIcon = (itemPositions[mouseIdx] - mousePos).Length();
+                        // scale up that icon specifically based upon the mouse distance to the center.
+                        itemScales[idx] = distanceToIcon > iconRadius ? 1f : Math.Clamp(Math.Abs(iconRadius - distanceToIcon + (ItemSize * .5f)) * .025f, 1f, 2f);
+                        // Plugin.Logger.Debug($"Scale: {itemScales[idx]} | disIcon: {distanceToIcon} | Status: {distanceToIcon > iconRadius} | math: {Math.Abs(iconRadius - distanceToIcon + (ItemSize * .5f)) * .025f}");
+                    }
+
+                    float scale = !Previewing && Plugin.Settings.AnimateIconSizes ? itemScales[idx] : 1f;
+                    _validItems[idx].Draw(itemPositions[idx], new Vector2(ItemSize, ItemSize), scale, idx == mouseIdx, _baseColor, _itemsAlpha[idx], ShowTooltips, drawList);
+                }
+
+
+
             }
             #endregion
-            #region Quick Action
-            // quick action
-            if (QuickActionElement != null)
-            {
-                // _quickActionSelected = DrawSelectionBackground && _selectedIndex == -1 && !Previewing && distanceToCenter <= ItemSize.Y * 2;
-                _quickActionSelected = DrawSelectionBackground && _selectedIndex == -1 && !Previewing && distanceToCenter <= ItemSize * 2;
-                float alpha = _itemsAlpha.Length > 0 ? _itemsAlpha[0] : 1f;
-                uint selectionColor = alpha >= 1f ? _baseColor : 0;
-                float scale = !Previewing && Plugin.Settings.AnimateIconSizes && itemScales.Length > 0 && _quickActionSelected ? 2f : 1f;
 
-                QuickActionElement.Draw(center, new Vector2(ItemSize, ItemSize), scale, _quickActionSelected, selectionColor, alpha, ShowTooltips, drawList);
-            }
 
-            if (previousSelection != _selectedIndex && _selectedIndex >= 0)
-            {
-                _selectionStartTime = ImGui.GetTime();
-            }
-            #endregion
+
             ImGui.End();
             ImGui.PopStyleVar();
         }
 
+        /// <summary>
+        /// Set's the Vector2 positions of each icon based upon the provided angle.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="count"></param>
+        /// <param name="startPos"></param>
+        /// <param name="centerPos"></param>
+        /// <returns></returns>
+        private Vector2[] IconLayout(double angle, int count, Vector2 startPos, Vector2 centerPos)
+        {
+            Vector2[] layout = new Vector2[count];
+
+            for (int idx = 0; idx < count; idx++)
+            {
+                double sinA = Math.Sin(angle * idx);
+                double cosA = Math.Cos(angle * idx);
+                Vector2 iPos = DrawHelper.RotationPoint(startPos, cosA, sinA);
+
+                layout[idx] = centerPos + iPos;
+            }
+            return layout;
+
+        }
+
+        /// <summary>
+        /// Calculates the Icon spacing when moving the mouse near an Icon.
+        /// </summary>
+        /// <param name="angle">The original offset angle.</param>
+        /// <param name="offsetPercent">The percentage of the angle to adjust the icons by.</param>
+        /// <param name="curIdx">The current Icon/Item that is the mouse is near/over.</param>
+        /// <param name="curLayout">The current Icon/Items layout Vector2 array.</param>
+        /// <param name="startPos">The start position the Icon/Items layout uses.</param>
+        /// <param name="centerPos">The center position of the ring.</param>
+        private void AdjustedIconLayout(double angle, float offsetPercent, int curIdx, ref Vector2[] curLayout, Vector2 startPos, Vector2 centerPos)
+        {
+            double offsetAngle = angle * offsetPercent;
+
+            int offsetCount = (int)(curLayout.Count() * .125);
+
+            for (int idx = 1; idx <= offsetCount; idx++)
+            {
+                double curOffsetAngle = (offsetAngle / offsetCount) * (offsetCount - idx + 1);
+                double sinAup = Math.Sin(angle * (curIdx + idx) + curOffsetAngle);
+                double cosAup = Math.Cos(angle * (curIdx + idx) + curOffsetAngle);
+                Vector2 iPosup = DrawHelper.RotationPoint(startPos, cosAup, sinAup);
+                curLayout[(curIdx + idx) % curLayout.Count()] = centerPos + iPosup;
+
+                double sinAdwn = Math.Sin(angle * (curIdx - idx) - curOffsetAngle);
+                double cosAdwn = Math.Cos(angle * (curIdx - idx) - curOffsetAngle);
+                Vector2 iPosdwn = DrawHelper.RotationPoint(startPos, cosAdwn, sinAdwn);
+                curLayout[((curIdx - idx) + curLayout.Count()) % curLayout.Count()] = centerPos + iPosdwn;
+
+
+            }
+
+        }
         private Vector2 ValidatedPosition(Vector2 pos)
         {
             Vector2 screenSize = ImGui.GetMainViewport().Size;
             return new Vector2(Math.Max(0, pos.X), Math.Min(screenSize.Y, pos.Y));
         }
 
-        private Vector2 ValidatedSize(Vector2 pos, Vector2 size)
-        {
-            Vector2 endPos = ValidatedPosition(pos + size);
-            return endPos - pos;
-        }
+        // private Vector2 ValidatedSize(Vector2 pos, Vector2 size)
+        // {
+        //     Vector2 endPos = ValidatedPosition(pos + size);
+        //     return endPos - pos;
+        // }
 
         private bool CheckNestedRingSelection()
         {

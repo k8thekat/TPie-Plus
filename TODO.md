@@ -4,9 +4,9 @@
 
 ---
 
-- !ISSUE: Mouse hover highlighting is selecting multiple icons.
-- !ISSUE: If a Quick Action is picked; the Ring doesn't re-calculate spacing around.
+- FIXED: v3.0.2.0 -!ISSUE: Mouse hover highlighting is selecting multiple icons.
 - FIXED: v3.0.1.0 - !ISSUE: Icon spacing is off when lot's of icons are present.
+  - FIXED: v3.0.1.0 - !ISSUE: If a Quick Action is picked; the Ring doesn't re-calculate spacing around.
 
 ## QoL
 
@@ -19,4 +19,3 @@
 
 - See about getting the font used for Item Count and using that for Tooltips/etc.
   - Possibly see about writing the Item name in the middle of the circle when hovered.
-- Auto spacing/Adjust scaling of Icon when mousing over the Icon we could subtract a flat value or % from the angle value.

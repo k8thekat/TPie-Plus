@@ -17,7 +17,7 @@
 			"presentation": {
 				"reveal": "always",
 				"focus": true,
-				"panel": "new",
+				"panel": "shared",
 				"echo": true,
 		
 			}

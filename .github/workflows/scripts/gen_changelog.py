@@ -95,8 +95,8 @@ user = "k8thekat"
 project: str = "TPie-Plus"
 set_version = f"## Version - {version} - [{new_commit[:7]}](https://github.com/{user}/{project}/commit/{new_commit})\n"
 # add_changelog: str = f"#### CHANGELOG.md\n- Version info from `{cl_ver}` added.\n\n"
-add_init: str = f"#### Version bump to `{version}`\n\n"
-data = set_version + add_init
+# add_init: str = f"#### Version bump to `{version}`\n\n"
+data = set_version
 for file_name, file_changes in files.items():
     data: str = data + "#### " + file_name + "\n" + "\n".join(file_changes) + "\n\n"
 
